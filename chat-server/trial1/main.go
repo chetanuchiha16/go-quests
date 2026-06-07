@@ -23,7 +23,7 @@ func main() {
 		}
 		// no_of_clients += 1
 
-		go handleClient(conn, clients)
+		go handleClient(conn, clients) // use pointer to avoid copy and sync the same clients slice
 
 	}
 

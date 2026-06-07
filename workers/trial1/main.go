@@ -23,7 +23,7 @@ func main() {
 	tasks := make(chan int)
 	var wg sync.WaitGroup
 	fanOut(tasks, 3, &wg)
-	for i := range 10 {
+	for i := range 10 { // this is sequential here
 		tasks <- i
 	}
 	close(tasks)
