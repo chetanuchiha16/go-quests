@@ -14,7 +14,7 @@ func withBuffered() {
 	defer cancel()
 
 	go func(ctx context.Context, ch chan bool) {
-		select {
+		select {// gives and moves away if there was another trying to push to the channel, that would block
 		case <-time.After(1 * time.Second):
 			ch <- false
 		case <-ctx.Done():
@@ -38,13 +38,13 @@ func withBuffered() {
 }
 func withoutBuffered() {
 	fmt.Printf("Goroutines at start with no buffer: %d\n", runtime.NumGoroutine())
-	
+
 	ch := make(chan bool)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	go func(ctx context.Context, ch chan bool) {
-		select {
+		select { // blocked because main never recieves it
 		case <-time.After(1 * time.Second):
 			ch <- false
 		case <-ctx.Done():
@@ -69,7 +69,7 @@ func withoutBuffered() {
 func main() {
 	fmt.Println("running without buffered channel")
 	withoutBuffered()
-	
+
 	fmt.Println("\n\nrunning with buffered channel")
 	withBuffered()
 }
