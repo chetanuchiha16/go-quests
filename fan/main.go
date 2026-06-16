@@ -2,14 +2,14 @@ package main
 
 import "fmt"
 
-func fanout(workers int, tasks <-chan string) []chan string{
+func fanout(workers int, tasks <-chan string) []chan string {
 	outs := make([]chan string, workers)
 	for worker := range workers {
 		out := make(chan string)
 		go func(worker int) {
 			defer close(out)
 			for task := range tasks {
-				result := fmt.Sprintf("%v by worker %v",task, worker)
+				result := fmt.Sprintf("%v by worker %v", task, worker)
 				out <- result
 			}
 		}(worker + 1)
@@ -26,7 +26,7 @@ func main() {
 	go func() {
 		defer close(tasks)
 		for i := range 10 {
-			tasks <- fmt.Sprintf("task %v", i + 1)
+			tasks <- fmt.Sprintf("task %v", i+1)
 		}
 	}()
 
@@ -37,22 +37,3 @@ func main() {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
